@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <Version>1.0</Version>
+    <Title>MeshQuadrangulation</Title>
+    <Description>Description of MeshQuadrangulation</Description>
+    <TargetExt>.gha</TargetExt>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Grasshopper" Version="7.29.23107.3001" IncludeAssets="compile;build" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QuadGraphLib\QuadGraphLib.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Component\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Component\" />
+  </ItemGroup>
+</Project>

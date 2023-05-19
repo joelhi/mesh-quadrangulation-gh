@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="GraphCore\" />
+    <None Remove="GraphWalk\" />
+    <None Remove="Match\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Core\" />
+    <Folder Include="Walk\" />
+    <Folder Include="Match\" />
+  </ItemGroup>
+</Project>
