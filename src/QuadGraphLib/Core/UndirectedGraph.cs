@@ -16,6 +16,15 @@ namespace QuadGraphLib.Core
 		{
 			
 		}
+
+		public List<XYZ> TryAddNodes
+
+		public bool TryAddNode(XYZ node)
+		{
+
+		}
+
+		public bool TryAdd
 	}
 }
 

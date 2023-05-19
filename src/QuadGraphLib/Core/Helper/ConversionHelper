@@ -5,7 +5,7 @@ namespace QuadGraphLib.Core.Helper
 {
     public static class ConversionHelper
     {
-        public static Point3d[] MapToRhino(this XYZ[] nodes)
+        public static Point3d[] XYZToRhino(this XYZ[] nodes)
         {
             Point3d[] rh_pts = new Point3d[nodes.Length];
 
@@ -25,7 +25,7 @@ namespace QuadGraphLib.Core.Helper
             return rh_pts;
         }
 
-        public static XYZ[] MapToXYZ(this Point3d[] rh_pts)
+        public static XYZ[] RhinoToXYZ(this Point3d[] rh_pts)
         {
             XYZ[] nodes = new XYZ[rh_pts.Length];
 
