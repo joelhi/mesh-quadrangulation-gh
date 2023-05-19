@@ -17,7 +17,7 @@ namespace MeshQuadrangulation
     /// new tabs/panels will automatically be created.
     /// </summary>
     public MeshQuadrangulationComponent()
-      : base("MeshQuadrangulationComponent", "m_quadr",
+      : base("Mesh Quadrangulation", "m_quadr",
         "Quadrangulate a tri mesh using a matching algorithm",
         "Mesh", "Quadrangulation")
     {

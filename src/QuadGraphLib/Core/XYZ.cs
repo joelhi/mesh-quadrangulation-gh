@@ -30,7 +30,7 @@ namespace QuadGraphLib.Core
             this.z = z;
         }
 
-		public double SpatialHash => SpatialHelper.compute_spatial_hash(this.x, this.y, this.z);
+		public int SpatialHash => SpatialHelper.ComputeSpatialHash(this.x, this.y, this.z);
     }
 }
 

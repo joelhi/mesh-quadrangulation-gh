@@ -17,14 +17,38 @@ namespace QuadGraphLib.Core
 			
 		}
 
-		public List<XYZ> TryAddNodes
+		public List<XYZ> TryAddNodes(IEnumerable<XYZ> nodes)
+		{
+			List<XYZ> failed = new List<XYZ>();
+
+			foreach (XYZ node in nodes)
+			{
+				if(!TryAddNode(node))
+				{
+					failed.Add(node);
+				}
+			}
+
+			return failed;
+		}
 
 		public bool TryAddNode(XYZ node)
 		{
+			if(nodes_map.ContainsKey(node.SpatialHash))
+			{
+				return false;
+			}
 
+			nodes_map.Add(node.SpatialHash, nodes_xyz.Count);
+			nodes_xyz.Add(node);
+			
+			return true;
 		}
 
-		public bool TryAdd
+		public bool TryAddEdge(EdgeXYZ edge)
+		{
+			if(edge.A.SpatialHash)
+		}
 	}
 }
 
