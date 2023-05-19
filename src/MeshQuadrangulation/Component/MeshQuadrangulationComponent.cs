@@ -17,7 +17,7 @@ namespace MeshQuadrangulation
     /// new tabs/panels will automatically be created.
     /// </summary>
     public MeshQuadrangulationComponent()
-      : base("MeshQuadrangulationComponent", "mquadr",
+      : base("MeshQuadrangulationComponent", "m_quadr",
         "Quadrangulate a tri mesh using a matching algorithm",
         "Mesh", "Quadrangulation")
     {
@@ -28,6 +28,7 @@ namespace MeshQuadrangulation
     /// </summary>
     protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
     {
+      
     }
 
     /// <summary>

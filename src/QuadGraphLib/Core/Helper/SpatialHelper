@@ -1,0 +1,21 @@
+using System;
+
+namespace QuadGraphLib.Core.Helper
+{
+
+    public static class SpatialHelper
+    {
+        public static double compute_spatial_hash(double x, double y, double z, double tol = 0.001)
+        {
+            double multiplier = 1 / tol;
+            int s_hash = 23;
+
+            s_hash = s_hash * 37 + (int)(x * multiplier);
+            s_hash = s_hash * 37 + (int)(y * multiplier);
+            s_hash = s_hash * 37 + (int)(z * multiplier);
+
+            return s_hash;
+        }
+    }
+
+}

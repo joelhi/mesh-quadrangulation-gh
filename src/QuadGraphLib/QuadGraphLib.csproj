@@ -4,6 +4,14 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>11.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>11.0</LangVersion>
+  </PropertyGroup>
   <ItemGroup>
     <None Remove="GraphCore\" />
     <None Remove="GraphWalk\" />
@@ -13,5 +21,8 @@
     <Folder Include="Core\" />
     <Folder Include="Walk\" />
     <Folder Include="Match\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Grasshopper" Version="7.29.23107.3001" />
   </ItemGroup>
 </Project>
