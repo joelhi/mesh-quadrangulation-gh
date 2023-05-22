@@ -30,7 +30,18 @@ namespace QuadGraphLib.Core
             this.z = z;
         }
 
-		public int SpatialHash => SpatialHelper.ComputeSpatialHash(this.x, this.y, this.z);
+		public int SpatialHash => Spatial.ComputeSpatialHash(this.x, this.y, this.z);
+
+		public static XYZ operator+ (XYZ a, XYZ b) => new XYZ(a.x + b.x, a.y + b.y, a.z + b.z);
+
+		public static XYZ operator- (XYZ a, XYZ b) => new XYZ(a.x - b.x, a.y - b.y, a.z - b.z);
+
+		public static double operator* (XYZ a, XYZ b) => a.x * b.x + a.y * b.y + a.z * b.z;
+
+		public static XYZ operator* (XYZ xyz, double val) => new XYZ(xyz.x * val, xyz.y * val, xyz.z * val);
+
+		public static XYZ operator/ (XYZ xyz, double val) => new XYZ(xyz.x / val, xyz.y / val, xyz.z / val);
+
     }
 }
 

@@ -72,6 +72,12 @@ namespace QuadGraphLib.Core.Helper
 
             return hash;
         }
+
+        public static double Length(this XYZ xyz) => Math.Sqrt(Math.Pow(xyz.x,2) + Math.Pow(xyz.y,2) + Math.Pow(xyz.z,2));
+
+        public static double Length(this EdgeXYZ edge) => DistanceTo(edge.A, edge.B);
+        
+        public static double DistanceTo(this XYZ a, XYZ b) => (b- a).Length();
     }
 
 }

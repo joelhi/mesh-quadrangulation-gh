@@ -14,7 +14,7 @@ namespace QuadGraphLib.Core
 
 		public bool IsDirected {get; private set;}
 
-		public UndirectedGraphXYZ(bool directed = false)
+		public GraphXYZ(bool directed = false)
 		{
 			nodes_xyz = new List<XYZ>();
 			nodes_map = new Dictionary<int, int>();
@@ -107,7 +107,7 @@ namespace QuadGraphLib.Core
 			return true;
 		}
 
-		public List<EdgeXYZ> GetEdges()
+		public EdgeXYZ[] GetEdges()
 		{
 			List<EdgeXYZ> edges = new List<EdgeXYZ>();
 
@@ -128,8 +128,10 @@ namespace QuadGraphLib.Core
 				}
 			}
 
-			return edges;
+			return edges.ToArray();
 		}
+
+		public XYZ[] GetNodes() => nodes_xyz.ToArray();
 	}
 }
 

@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Grasshopper;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
+
+using QuadGraphLib.Core.Helper;
+using QuadGraphLib.Core;
 
 namespace MeshQuadrangulation
 {
@@ -28,7 +32,7 @@ namespace MeshQuadrangulation
     /// </summary>
     protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
     {
-      
+      pManager.AddMeshParameter("Mesh","M","Mesh to quadrangulate",GH_ParamAccess.item);
     }
 
     /// <summary>
@@ -36,6 +40,8 @@ namespace MeshQuadrangulation
     /// </summary>
     protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
     {
+      pManager.AddLineParameter("Temp Lines","Temp Lines","Temp Lines",GH_ParamAccess.list);
+      pManager.AddPointParameter("Temp Points","Temp Points","Temp Points",GH_ParamAccess.list);
     }
 
     /// <summary>
@@ -45,6 +51,15 @@ namespace MeshQuadrangulation
     /// to store data in output parameters.</param>
     protected override void SolveInstance(IGH_DataAccess DA)
     {
+        Mesh m = new Mesh();
+
+        DA.GetData(0, ref m);
+
+        GraphXYZ graph = m.ToFaceGraph();
+
+        DA.SetData(0, graph.GetEdges().ToRhino());
+        DA.SetData(1, graph.GetNodes().ToRhino());
+
     }
 
     /// <summary>
