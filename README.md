@@ -1,4 +1,4 @@
-# mesh-quadrangulation-gh
-A grasshopper component to quadrangulate tri-meshes using a graph matching approach.
+# Mesh Quadrangulation
+A grasshopper component to quadrangulate tri-meshes by merging faces using a graph-matching approach.
 
 ![Example](img/quadrangulation2.gif)
