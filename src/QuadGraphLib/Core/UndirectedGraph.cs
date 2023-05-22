@@ -4,26 +4,33 @@ using Rhino.Geometry;
 
 namespace QuadGraphLib.Core
 {
-	public class UndirectedGraph
+	public class UndirectedGraphXYZ
 	{
 		private List<XYZ> nodes_xyz {get; set;} 
 
 		private Dictionary<int, int> nodes_map {get; set;} 
 		
-		private Dictionary<int, List<int>> nodes_conn {get; set;}
+		private List<HashSet<int>> nodes_conn {get; set;}
 
-		public UndirectedGraph()
+		public UndirectedGraphXYZ()
 		{
 			nodes_xyz = new List<XYZ>();
 			nodes_map = new Dictionary<int, int>();
-			nodes_conn = new Dictionary<int, List<int>>();
+			nodes_conn = new List<HashSet<int>>();
 		}
 
 		public bool HasNode(XYZ node) => nodes_map.ContainsKey(node.SpatialHash);
 
-		public bool HasEdge(EdgeXYZ)
+		public int NodeIndex(XYZ node) => nodes_map[node.SpatialHash];
+
+		public bool HasEdge(EdgeXYZ edge)
 		{
-			
+			if(nodes_conn[NodeIndex(edge.A)].Contains(NodeIndex(edge.B)))
+			{
+				return true;
+			}
+
+			return nodes_conn[NodeIndex(edge.B)].Contains(NodeIndex(edge.A));
 		}
 
 		public List<XYZ> TryAddNodes(IEnumerable<XYZ> nodes)
@@ -43,14 +50,14 @@ namespace QuadGraphLib.Core
 
 		public bool TryAddNode(XYZ node)
 		{
-			if(nodes_map.ContainsKey(node.SpatialHash))
+			if(HasNode(node))
 			{
 				return false;
 			}
 
 			nodes_map.Add(node.SpatialHash, nodes_xyz.Count);
-			nodes_conn.Add(node.SpatialHash, new List<int>());
 			nodes_xyz.Add(node);
+			nodes_conn.Add(new HashSet<int>());
 			
 			return true;
 		}
@@ -73,6 +80,7 @@ namespace QuadGraphLib.Core
 			}
 
 			nodes_conn[nodes_map[edge.A.SpatialHash]].Add(nodes_map[edge.B.SpatialHash]);
+			nodes_conn[nodes_map[edge.B.SpatialHash]].Add(nodes_map[edge.A.SpatialHash]);
 
 			return true;
 		}
@@ -82,22 +90,23 @@ namespace QuadGraphLib.Core
 			List<EdgeXYZ> edges = new List<EdgeXYZ>();
 
 			HashSet<int> visited_nodes = new HashSet<int>();
- 
-			foreach (var pair in nodes_conn)
+			
+			for (int i = 0; i < nodes_xyz.Count; i++)
 			{
-				XYZ base_node = nodes_xyz[pair.Key];
-				visited_nodes.Add(pair.Key);
+				visited_nodes.Add(i);
 
-				for (int i = 0; i < pair.Value.Count; i++)
+				foreach (int id in nodes_conn[i])
 				{
-					if(visited_nodes.Contains(pair.Value[i])
+					if(visited_nodes.Contains(id))
 					{
 						continue;
 					}
 
-					edges.Add(base_node)
+					edges.Add(new EdgeXYZ(nodes_xyz[i], nodes_xyz[id]));
 				}
 			}
+
+			return edges;
 		}
 	}
 }
