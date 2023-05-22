@@ -4,7 +4,7 @@ using Rhino.Geometry;
 
 namespace QuadGraphLib.Core
 {
-	public class UndirectedGraphXYZ
+	public class GraphXYZ
 	{
 		private List<XYZ> nodes_xyz {get; set;} 
 
@@ -12,25 +12,38 @@ namespace QuadGraphLib.Core
 		
 		private List<HashSet<int>> nodes_conn {get; set;}
 
-		public UndirectedGraphXYZ()
+		public bool IsDirected {get; private set;}
+
+		public UndirectedGraphXYZ(bool directed = false)
 		{
 			nodes_xyz = new List<XYZ>();
 			nodes_map = new Dictionary<int, int>();
 			nodes_conn = new List<HashSet<int>>();
+
+			this.IsDirected = directed;
 		}
 
 		public bool HasNode(XYZ node) => nodes_map.ContainsKey(node.SpatialHash);
 
 		public int NodeIndex(XYZ node) => nodes_map[node.SpatialHash];
 
-		public bool HasEdge(EdgeXYZ edge)
+		public bool HasEdge(EdgeXYZ edge) => HasEdge(edge.A, edge.B);
+
+		public bool HasEdge(XYZ node_a, XYZ node_b) => HasEdge(NodeIndex(node_a), NodeIndex(node_b));
+
+		public bool HasEdge(int id_a, int id_b)
 		{
-			if(nodes_conn[NodeIndex(edge.A)].Contains(NodeIndex(edge.B)))
+			if(nodes_conn[id_a].Contains(id_b))
 			{
 				return true;
 			}
 
-			return nodes_conn[NodeIndex(edge.B)].Contains(NodeIndex(edge.A));
+			if(IsDirected)
+			{
+				return false;
+			}
+
+			return nodes_conn[id_b].Contains(id_a);
 		}
 
 		public List<XYZ> TryAddNodes(IEnumerable<XYZ> nodes)
@@ -62,25 +75,34 @@ namespace QuadGraphLib.Core
 			return true;
 		}
 
-		public bool TryAddEdge(EdgeXYZ edge, bool add_nodes = false)
+		public bool TryAddEdge(EdgeXYZ edge, bool add_nodes = false) => TryAddEdge(edge.A, edge.B, add_nodes);
+
+		public bool TryAddEdge(XYZ node_a, XYZ node_b, bool add_nodes = false)
 		{
 			if(add_nodes)
 			{
-				TryAddNode(edge.A);
-				TryAddNode(edge.B);
-			}
-			else if(!HasNode(edge.A) || !HasNode(edge.B))
-			{
-				return false;
+				TryAddNode(node_a);
+				TryAddNode(node_b);
 			}
 
-			if(HasEdge(edge))
+			return TryAddEdge(NodeIndex(node_a),NodeIndex(node_b), add_nodes);
+		}
+
+		public bool TryAddEdge(int id_a, int id_b, bool add_nodes = false)
+		{
+			if(HasEdge(id_a, id_b))
 			{
 				return false;
+			}	
+
+			nodes_conn[id_a].Add(id_b);
+
+			if(IsDirected)
+			{
+				return true;
 			}
 
-			nodes_conn[nodes_map[edge.A.SpatialHash]].Add(nodes_map[edge.B.SpatialHash]);
-			nodes_conn[nodes_map[edge.B.SpatialHash]].Add(nodes_map[edge.A.SpatialHash]);
+			nodes_conn[id_b].Add(id_a);
 
 			return true;
 		}

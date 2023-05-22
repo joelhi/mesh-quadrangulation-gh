@@ -5,6 +5,17 @@ namespace QuadGraphLib.Core.Helper
 {
     public static class Conversions
     {
+
+        public static UndirectedGraphXYZ ToGraph(this Mesh mesh)
+        {
+            mesh.Compact();
+
+            XYZ[] nodes = mesh.Vertices.ToPoint3dArray().ToXYZ();
+
+            
+            
+        }
+
         public static Point3d[] ToRhino(this XYZ[] nodes)
         {
             Point3d[] rh_pts = new Point3d[nodes.Length];
