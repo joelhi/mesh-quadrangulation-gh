@@ -3,9 +3,9 @@ using Rhino.Geometry;
 
 namespace QuadGraphLib.Core.Helper
 {
-    public static class ConversionHelper
+    public static class Conversions
     {
-        public static Point3d[] XYZToRhino(this XYZ[] nodes)
+        public static Point3d[] ToRhino(this XYZ[] nodes)
         {
             Point3d[] rh_pts = new Point3d[nodes.Length];
 
@@ -25,7 +25,7 @@ namespace QuadGraphLib.Core.Helper
             return rh_pts;
         }
 
-        public static XYZ[] RhinoToXYZ(this Point3d[] rh_pts)
+        public static XYZ[] ToXYZ(this Point3d[] rh_pts)
         {
             XYZ[] nodes = new XYZ[rh_pts.Length];
 
@@ -43,6 +43,46 @@ namespace QuadGraphLib.Core.Helper
             }
 
             return nodes;
+        }
+
+        public static EdgeXYZ[] ToEdgeXYZ(this Line[] rh_lines)
+        {
+            EdgeXYZ[] edges = new EdgeXYZ[rh_lines.Length];
+
+            unsafe
+            {
+                int size = edges.Length * sizeof(EdgeXYZ);
+
+                fixed(void* nd_ptr = &edges[0])
+                {
+                    fixed(void* pt_ptr = &rh_lines[0])
+                    {
+                        Buffer.MemoryCopy(pt_ptr, nd_ptr, size, size);
+                    }
+                }
+            }
+
+            return edges;
+        }
+
+        public static Point3d[] ToEdgeXYZ(this XYZ[] nodes)
+        {
+            Point3d[] rh_pts = new Point3d[nodes.Length];
+
+            unsafe
+            {
+                int size = nodes.Length * sizeof(XYZ);
+
+                fixed(void* nd_ptr = &nodes[0])
+                {
+                    fixed(void* pt_ptr = &rh_pts[0])
+                    {
+                        Buffer.MemoryCopy(nd_ptr, pt_ptr, size, size);
+                    }
+                }
+            }
+
+            return rh_pts;
         }
     }
 }

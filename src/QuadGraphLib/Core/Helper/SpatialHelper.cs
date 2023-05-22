@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace QuadGraphLib.Core.Helper
 {
 
-    public static class SpatialHelper
+    public static class Spatial
     {
         public static int ComputeSpatialHash(double x, double y, double z, double tol = 0.001)
         {
