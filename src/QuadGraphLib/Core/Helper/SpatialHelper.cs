@@ -5,9 +5,19 @@ namespace QuadGraphLib.Core.Helper
 
     public static class Spatial
     {
-        public static int ComputeSpatialHash(double x, double y, double z, double tol = 0.001)
+
+        public static void SetGlobalTol(double val)
         {
-            double multiplier = 1 / tol;
+            global_spatial_tolerance = val;
+        }
+
+        public static double GetGlobalTol() => global_spatial_tolerance; 
+
+        private static double global_spatial_tolerance = 0.001;
+
+        public static int ComputeSpatialHash(double x, double y, double z)
+        {
+            double multiplier = 1 / global_spatial_tolerance;
             int s_hash = 23;
 
             s_hash = s_hash * 37 + (int)(x * multiplier);
@@ -36,6 +46,31 @@ namespace QuadGraphLib.Core.Helper
             }
 
             return unique_nodes;
+        }
+
+        public static int ComputeIndexHash(int id_a, int id_b)
+        {
+            if(id_a >= id_b)
+            {
+                return (23 * 37 + id_a) * 37 + id_b;
+            }
+            else
+            {
+                return (23 * 37 + id_b) * 37 + id_a;
+            }
+        }
+
+        public static int ComputeIndexHash(int[] ids)
+        {
+            Array.Sort(ids);
+
+            int hash = 23;
+            for (int i = 0; i < ids.Length; i++)
+            {
+                hash = hash * 37 + ids[i];
+            }
+
+            return hash;
         }
     }
 

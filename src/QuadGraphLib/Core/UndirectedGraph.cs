@@ -21,6 +21,11 @@ namespace QuadGraphLib.Core
 
 		public bool HasNode(XYZ node) => nodes_map.ContainsKey(node.SpatialHash);
 
+		public bool HasEdge(EdgeXYZ)
+		{
+			
+		}
+
 		public List<XYZ> TryAddNodes(IEnumerable<XYZ> nodes)
 		{
 			List<XYZ> failed = new List<XYZ>();
@@ -62,6 +67,11 @@ namespace QuadGraphLib.Core
 				return false;
 			}
 
+			if(HasEdge(edge))
+			{
+				return false;
+			}
+
 			nodes_conn[nodes_map[edge.A.SpatialHash]].Add(nodes_map[edge.B.SpatialHash]);
 
 			return true;
@@ -84,8 +94,8 @@ namespace QuadGraphLib.Core
 					{
 						continue;
 					}
-					
-					edges.Add()
+
+					edges.Add(base_node)
 				}
 			}
 		}
