@@ -42,8 +42,9 @@ namespace MeshQuadrangulation
     /// </summary>
     protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
     {
-      pManager.AddLineParameter("Temp Lines","Temp Lines","Temp Lines",GH_ParamAccess.list);
+      
       pManager.AddPointParameter("Temp Points","Temp Points","Temp Points",GH_ParamAccess.list);
+      pManager.AddLineParameter("Temp Lines","Temp Lines","Temp Lines",GH_ParamAccess.list);
     }
 
     /// <summary>
@@ -61,10 +62,12 @@ namespace MeshQuadrangulation
 
         IWalk walk = new WalkBFS(graph);
 
-        GraphXYZ bfs = walk.Walk(new int[1]{5});
+        List<iEdge> bfs = walk.Walk(new int[1]{5});
 
-        DA.SetDataList(0, bfs.GetEdges().ToRhino());
-        DA.SetDataList(1, bfs.GetNodes().ToRhino());
+        Point3d[] rh_pts = graph.GetNodes().ToRhino();
+
+        DA.SetDataList(0, rh_pts);
+        DA.SetDataList(1, bfs.Select(e => new Line(rh_pts[e.id_a], rh_pts[e.id_b])));
 
     }
 

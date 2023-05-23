@@ -15,13 +15,13 @@ namespace MeshGraphLib.Walk
 			this.graph = graph;
 		}
 
-        public GraphXYZ Walk(IEnumerable<int> start_indices)
+        public List<iEdge> Walk(IEnumerable<int> sources)
         {
             Queue<int> to_search = new Queue<int>();
-			HashSet<int> visited_nodes = new HashSet<int>(start_indices);
+			HashSet<int> visited_nodes = new HashSet<int>(sources);
 			List<iEdge> edges = new List<iEdge>();
 
-			foreach (int id in start_indices){ to_search.Enqueue(id); }
+			foreach (int id in sources){ to_search.Enqueue(id); }
 
 			while (to_search.Count > 0)
 			{
@@ -38,17 +38,7 @@ namespace MeshGraphLib.Walk
 				}
 			}
 
-			// Construct new graph
-			GraphXYZ bfs_graph = new GraphXYZ();
-
-			bfs_graph.TryAddNodes(graph.GetNodes());
-
-			for (int i = 0; i < edges.Count; i++)
-			{
-				bfs_graph.TryAddEdge(edges[i].id_a, edges[i].id_b);
-			}
-
-			return bfs_graph;
+			return edges;
 
         }
     }

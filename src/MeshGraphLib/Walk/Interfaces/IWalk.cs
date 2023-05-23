@@ -6,7 +6,7 @@ namespace MeshGraphLib.Walk.Interfaces
 {
     public interface IWalk
     {
-        GraphXYZ Walk(IEnumerable<int> start_indices);
+        List<iEdge> Walk(IEnumerable<int> start_indices);
     }
 }
 
