@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using MeshGraphLib.Core;
 using MeshGraphLib.Match.Selection;
 
@@ -31,15 +31,25 @@ namespace MeshGraphLib.Match
                 int current = to_search.Dequeue();
                 visited_nodes.Add(current);
 
+                List<iEdge> node_edges = new List<iEdge>();
+
                 foreach (int id in this.graph.GetConnectedNodes(current))
                 {
                     if (visited_nodes.Contains(id)) { continue; }
 
                     visited_nodes.Add(id);
-                    edges.Add(new iEdge(current, id));
-                    to_search.Enqueue(id);
+                    node_edges.Add(new iEdge(current, id));
                 }
+
+                if (node_edges.Count == 0) { continue; }
+
+                iEdge selected = selection_criteria.PickMatching(node_edges, graph, out int[] remaining);
+
+                visited_nodes.Add(selected.id_b);
+
+                for (int i = 0; i < remaining.Length; i++) { to_search.Enqueue(remaining[i]); }
             }
+
 
             return edges;
         }

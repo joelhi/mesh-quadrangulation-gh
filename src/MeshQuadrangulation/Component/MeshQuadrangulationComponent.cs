@@ -10,6 +10,8 @@ using MeshGraphLib.Core.Helper;
 using MeshGraphLib.Core;
 using MeshGraphLib.Walk;
 using MeshGraphLib.Walk.Interfaces;
+using MeshGraphLib.Match;
+using MeshGraphLib.Match.Selection;
 
 namespace MeshQuadrangulation
 {
@@ -60,14 +62,14 @@ namespace MeshQuadrangulation
 
         GraphXYZ graph = m.ToFaceGraph();
 
-        IWalk walk = new WalkBFS(graph);
+        BFSMatching match = new BFSMatching(graph, new EdgeLengthSelection());
 
-        List<iEdge> bfs = walk.Walk(new int[1]{5});
+        List<iEdge> matchings = match.ComputeMatchings(new int[1]{5});
 
         Point3d[] rh_pts = graph.GetNodes().ToRhino();
 
         DA.SetDataList(0, rh_pts);
-        DA.SetDataList(1, bfs.Select(e => new Line(rh_pts[e.id_a], rh_pts[e.id_b])));
+        DA.SetDataList(1, matchings.Select(e => new Line(rh_pts[e.id_a], rh_pts[e.id_b])));
 
     }
 

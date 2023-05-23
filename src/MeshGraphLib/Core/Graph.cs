@@ -146,6 +146,21 @@ namespace MeshGraphLib.Core
         }
 
 		public XYZ[] GetNodes() => nodes_xyz.ToArray();
-	}
+
+		public XYZ GetNode(int id) => nodes_xyz[id];
+
+        public bool TryGetNode(int id, out XYZ node)
+		{
+			if(id >= nodes_xyz.Count)
+			{
+				node = new XYZ(0,0,0);
+				return false;
+			}
+
+			node = nodes_xyz[id];
+
+			return true;
+		}
+    }
 }
 
