@@ -57,8 +57,8 @@ namespace MeshQuadrangulation
 
         GraphXYZ graph = m.ToFaceGraph();
 
-        DA.SetData(0, graph.GetEdges().ToRhino());
-        DA.SetData(1, graph.GetNodes().ToRhino());
+        DA.SetDataList(0, graph.GetEdges().ToRhino());
+        DA.SetDataList(1, graph.GetNodes().ToRhino());
 
     }
 

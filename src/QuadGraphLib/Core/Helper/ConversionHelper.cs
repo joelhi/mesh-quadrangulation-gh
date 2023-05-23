@@ -45,7 +45,12 @@ namespace QuadGraphLib.Core.Helper
             // Add edges for adjacent faces.
             for (int i = 0; i < mesh.Faces.Count; i++)
             {
-                mesh.Faces.AdjacentFaces(i).Select(id => graph.TryAddEdge(i, id));
+                int[] adjacent_faces = mesh.Faces.AdjacentFaces(i);
+
+                for (int j = 0; j < adjacent_faces.Length; j++)
+                {
+                    graph.TryAddEdge(i, adjacent_faces[j]);
+                }
             }
 
             return graph;
