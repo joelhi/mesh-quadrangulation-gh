@@ -32,9 +32,10 @@ namespace MeshGraphLib.Match.Selection
 
             HashSet<int> remaining = graph.GetConnectedNodes(selected_edge.id_b);
 
-            edges.Select(e => remaining.Add(e.id_b));
-            remaining.Remove(selected_edge.id_b);
+            foreach (var e in edges){ remaining.Add(e.id_b); }
 
+            remaining.Remove(selected_edge.id_a);
+            remaining.Remove(selected_edge.id_b);
             remaining_nodes = remaining.ToArray();
 
             return selected_edge;

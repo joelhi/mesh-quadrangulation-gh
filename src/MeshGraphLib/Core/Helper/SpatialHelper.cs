@@ -13,7 +13,7 @@ namespace MeshGraphLib.Core.Helper
 
         public static double GetGlobalTol() => global_spatial_tolerance; 
 
-        private static double global_spatial_tolerance = 0.0001;
+        private static double global_spatial_tolerance = 1e-7;
 
         public static int ComputeSpatialHash(double x, double y, double z)
         {
