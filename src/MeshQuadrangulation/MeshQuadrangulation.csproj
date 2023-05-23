@@ -22,12 +22,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QuadGraphLib\QuadGraphLib.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="Component\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Component\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MeshGraphLib\MeshGraphLib.csproj" />
   </ItemGroup>
 </Project>

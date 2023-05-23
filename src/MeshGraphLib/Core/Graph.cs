@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Rhino.Geometry;
 
-namespace QuadGraphLib.Core
+namespace MeshGraphLib.Core
 {
 	public class GraphXYZ
 	{
@@ -33,18 +33,18 @@ namespace QuadGraphLib.Core
 
 		public bool HasEdge(int id_a, int id_b)
 		{
-			if(nodes_conn[id_a].Contains(id_b))
-			{
-				return true;
-			}
+			if(id_a >= nodes_xyz.Count || id_b >= nodes_xyz.Count) { return false; }
 
-			if(IsDirected)
-			{
-				return false;
-			}
+			if(nodes_conn[id_a].Contains(id_b)){ return true; }
+
+			if(IsDirected){ return false; }
 
 			return nodes_conn[id_b].Contains(id_a);
 		}
+
+		public HashSet<int> GetConnectedNodes(int id) => nodes_conn[id];
+
+		public int NodeCount => nodes_xyz.Count;
 
 		public List<XYZ> TryAddNodes(IEnumerable<XYZ> nodes)
 		{
@@ -90,17 +90,13 @@ namespace QuadGraphLib.Core
 
 		public bool TryAddEdge(int id_a, int id_b, bool add_nodes = false)
 		{
-			if(HasEdge(id_a, id_b))
-			{
-				return false;
-			}	
+			if(HasEdge(id_a, id_b)){ return false; }
+
+			if (id_a >= nodes_xyz.Count || id_b >= nodes_xyz.Count) { return false; }
 
 			nodes_conn[id_a].Add(id_b);
 
-			if(IsDirected)
-			{
-				return true;
-			}
+			if(IsDirected){ return true; }
 
 			nodes_conn[id_b].Add(id_a);
 
@@ -119,10 +115,7 @@ namespace QuadGraphLib.Core
 
 				foreach (int id in nodes_conn[i])
 				{
-					if(visited_nodes.Contains(id))
-					{
-						continue;
-					}
+					if(visited_nodes.Contains(id)){ continue; }
 
 					edges.Add(new EdgeXYZ(nodes_xyz[i], nodes_xyz[id]));
 				}
@@ -130,6 +123,27 @@ namespace QuadGraphLib.Core
 
 			return edges.ToArray();
 		}
+
+		public iEdge[] GetEdgesConnectivity()
+		{
+            List<iEdge> edges = new List<iEdge>();
+
+            HashSet<int> visited_nodes = new HashSet<int>();
+
+            for (int i = 0; i < nodes_xyz.Count; i++)
+            {
+                visited_nodes.Add(i);
+
+                foreach (int id in nodes_conn[i])
+                {
+                    if (visited_nodes.Contains(id)){ continue; }
+
+                    edges.Add(new iEdge(i, id));
+                }
+            }
+
+            return edges.ToArray();
+        }
 
 		public XYZ[] GetNodes() => nodes_xyz.ToArray();
 	}

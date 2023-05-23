@@ -6,8 +6,10 @@ using Grasshopper;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-using QuadGraphLib.Core.Helper;
-using QuadGraphLib.Core;
+using MeshGraphLib.Core.Helper;
+using MeshGraphLib.Core;
+using MeshGraphLib.Walk;
+using MeshGraphLib.Walk.Interfaces;
 
 namespace MeshQuadrangulation
 {
@@ -57,8 +59,12 @@ namespace MeshQuadrangulation
 
         GraphXYZ graph = m.ToFaceGraph();
 
-        DA.SetDataList(0, graph.GetEdges().ToRhino());
-        DA.SetDataList(1, graph.GetNodes().ToRhino());
+        IWalk walk = new WalkBFS(graph);
+
+        GraphXYZ bfs = walk.Walk(new int[1]{5});
+
+        DA.SetDataList(0, bfs.GetEdges().ToRhino());
+        DA.SetDataList(1, bfs.GetNodes().ToRhino());
 
     }
 

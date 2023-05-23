@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using Rhino.Geometry;
 using System.Linq;
+using System.ComponentModel;
 
-namespace QuadGraphLib.Core.Helper
+namespace MeshGraphLib.Core.Helper
 {
     public static class Conversions
     {
@@ -41,6 +42,11 @@ namespace QuadGraphLib.Core.Helper
             graph.TryAddNodes(
                 mesh.Faces.Select(
                     face => GetFaceCenter(face, mesh)));
+
+            if (mesh.Faces.Count != graph.NodeCount)
+            {
+                throw new Exception("Falied to add all faces to graph. Please double check tolerance.");
+            }
 
             // Add edges for adjacent faces.
             for (int i = 0; i < mesh.Faces.Count; i++)

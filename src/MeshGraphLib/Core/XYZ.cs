@@ -1,7 +1,7 @@
 ﻿using System;
-using QuadGraphLib.Core.Helper;
+using MeshGraphLib.Core.Helper;
 
-namespace QuadGraphLib.Core
+namespace MeshGraphLib.Core
 {
 	public struct XYZ
 	{

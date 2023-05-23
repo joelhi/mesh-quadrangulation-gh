@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-namespace QuadGraphLib.Core.Helper
+namespace MeshGraphLib.Core.Helper
 {
 
     public static class Spatial
@@ -13,7 +13,7 @@ namespace QuadGraphLib.Core.Helper
 
         public static double GetGlobalTol() => global_spatial_tolerance; 
 
-        private static double global_spatial_tolerance = 0.001;
+        private static double global_spatial_tolerance = 0.0001;
 
         public static int ComputeSpatialHash(double x, double y, double z)
         {
@@ -34,15 +34,9 @@ namespace QuadGraphLib.Core.Helper
 
             foreach (EdgeXYZ edge in edges)
             {
-                if(hashes.Add(edge.A.SpatialHash))
-                {
-                    unique_nodes.Add(edge.A);
-                }
+                if(hashes.Add(edge.A.SpatialHash)){ unique_nodes.Add(edge.A);}
 
-                if(hashes.Add(edge.B.SpatialHash))
-                {
-                    unique_nodes.Add(edge.B);
-                }
+                if(hashes.Add(edge.B.SpatialHash)){ unique_nodes.Add(edge.B); }
             }
 
             return unique_nodes;

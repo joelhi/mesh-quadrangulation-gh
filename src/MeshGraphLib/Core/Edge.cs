@@ -1,10 +1,10 @@
 using System;
-namespace QuadGraphLib.Core
+namespace MeshGraphLib.Core
 {
     public struct iEdge
     {
-        int id_a;
-        int id_b;
+        public int id_a;
+        public int id_b;
 
         public iEdge()
         {

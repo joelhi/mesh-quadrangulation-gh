@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 
 using System;
 
-using QuadGraphLib;
+using MeshGraphLib;
 
 
 namespace MeshQuadrangulation
