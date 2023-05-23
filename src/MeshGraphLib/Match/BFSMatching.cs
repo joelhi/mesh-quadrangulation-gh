@@ -18,11 +18,12 @@ namespace MeshGraphLib.Match
 			this.selection_criteria = selection_criteria;
 		}
 
-		public List<iEdge> ComputeMatchings(IEnumerable<int> sources)
+		public List<iEdge> ComputeMatchings(IEnumerable<int> sources, out List<int> singles)
 		{
             Queue<int> to_search = new Queue<int>();
             HashSet<int> visited_nodes = new HashSet<int>();
             List<iEdge> edges = new List<iEdge>();
+            singles = new List<int>();
 
             foreach (int id in sources) { to_search.Enqueue(id); }
 
@@ -40,7 +41,11 @@ namespace MeshGraphLib.Match
                     node_edges.Add(new iEdge(current, id));
                 }
 
-                if (node_edges.Count == 0) { continue; }
+                if (node_edges.Count == 0)
+                {
+                    singles.Add(current);
+                    continue;
+                }
 
                 iEdge selected = selection_criteria.PickMatching(node_edges, graph, out int[] remaining);
 

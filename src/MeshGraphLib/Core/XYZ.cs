@@ -30,7 +30,11 @@ namespace MeshGraphLib.Core
             this.z = z;
         }
 
-		public int SpatialHash => Spatial.ComputeSpatialHash(this.x, this.y, this.z);
+		public XYZ INVALID => new XYZ(double.NaN, double.NaN, double.NaN);
+
+		public bool IsValid => !(double.IsNaN(this.x) || double.IsNaN(this.y) || double.IsNaN(this.z));
+
+        public int SpatialHash => Spatial.ComputeSpatialHash(this.x, this.y, this.z);
 
 		public static XYZ operator+ (XYZ a, XYZ b) => new XYZ(a.x + b.x, a.y + b.y, a.z + b.z);
 

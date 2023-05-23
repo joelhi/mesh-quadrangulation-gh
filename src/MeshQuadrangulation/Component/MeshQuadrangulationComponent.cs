@@ -12,6 +12,7 @@ using MeshGraphLib.Walk;
 using MeshGraphLib.Walk.Interfaces;
 using MeshGraphLib.Match;
 using MeshGraphLib.Match.Selection;
+using MeshGraphLib.Process;
 
 namespace MeshQuadrangulation
 {
@@ -45,8 +46,8 @@ namespace MeshQuadrangulation
     protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
     {
       
-      pManager.AddPointParameter("Temp Points","Temp Points","Temp Points",GH_ParamAccess.list);
-      pManager.AddLineParameter("Temp Lines","Temp Lines","Temp Lines",GH_ParamAccess.list);
+      pManager.AddMeshParameter("Mesh","M","Quadrangulated Mesh",GH_ParamAccess.item);
+      pManager.AddIntegerParameter("Sources","S","Sources for the search.",GH_ParamAccess.list);
     }
 
     /// <summary>
@@ -60,16 +61,19 @@ namespace MeshQuadrangulation
 
         DA.GetData(0, ref m);
 
-        GraphXYZ graph = m.ToFaceGraph();
+        GraphXYZ f_graph = m.ToFaceGraph();
+        iFace[] faces = m.ToFaces();
 
-        BFSMatching match = new BFSMatching(graph, new EdgeLengthSelection());
+        Quadrangulation q = new Quadrangulation(f_graph, faces, new EdgeLengthSelection());
 
-        List<iEdge> matchings = match.ComputeMatchings(new int[1]{5});
+        iFace[] q_faces = q.Quadrangulate(new int[1]{5});
 
-        Point3d[] rh_pts = graph.GetNodes().ToRhino();
+        Mesh q_m = new Mesh();
 
-        DA.SetDataList(0, rh_pts);
-        DA.SetDataList(1, matchings.Select(e => new Line(rh_pts[e.id_a], rh_pts[e.id_b])));
+        q_m.Vertices.AddVertices(m.Vertices);
+        q_m.Faces.AddFaces(q_faces.ToRhino());
+
+        DA.SetData(0, q_m);
 
     }
 

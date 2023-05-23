@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 using System.Linq;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace MeshGraphLib.Core.Helper
 {
@@ -28,6 +29,8 @@ namespace MeshGraphLib.Core.Helper
 
             return graph;
         }
+
+
 
         public static GraphXYZ ToFaceGraph(this Mesh mesh)
         {
@@ -62,6 +65,7 @@ namespace MeshGraphLib.Core.Helper
             return graph;
         }
 
+
         private static XYZ GetFaceCenter(MeshFace face, Mesh mesh)
         {
             if(face.IsTriangle)
@@ -70,6 +74,49 @@ namespace MeshGraphLib.Core.Helper
             }
             
             return (mesh.Vertices[face[0]] + mesh.Vertices[face[1]] + mesh.Vertices[face[2]] + mesh.Vertices[face[3]]).ToXYZ() / 3;
+        }
+
+        public static iFace[] ToFaces(this Mesh mesh)
+        {
+            MeshFace[] rh_faces = mesh.Faces.ToArray();
+
+            iFace[] faces = new iFace[rh_faces.Length];
+
+            unsafe
+            {
+                int size = faces.Length * sizeof(MeshFace);
+
+                fixed (void* f_ptr = &faces[0])
+                {
+                    fixed (void* r_ptr = &rh_faces[0])
+                    {
+                        Buffer.MemoryCopy(r_ptr, f_ptr, size, size);
+                    }
+                }
+            }
+
+            return faces;
+        }
+
+        public static MeshFace[] ToRhino(this iFace[] faces)
+        {
+
+            MeshFace[] rh_faces = new MeshFace[faces.Length];
+
+            unsafe
+            {
+                int size = faces.Length * sizeof(MeshFace);
+
+                fixed (void* f_ptr = &faces[0])
+                {
+                    fixed (void* r_ptr = &rh_faces[0])
+                    {
+                        Buffer.MemoryCopy(f_ptr, r_ptr, size, size);
+                    }
+                }
+            }
+
+            return rh_faces;
         }
 
         public static Point3d ToRhino(this XYZ node) => new Point3d(node.x, node.y, node.z);

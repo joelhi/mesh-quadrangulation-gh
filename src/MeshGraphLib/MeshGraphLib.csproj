@@ -17,12 +17,14 @@
     <None Remove="GraphWalk\" />
     <None Remove="Match\" />
     <None Remove="Match\Selection\" />
+    <None Remove="Process\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\" />
     <Folder Include="Walk\" />
     <Folder Include="Match\" />
     <Folder Include="Match\Selection\" />
+    <Folder Include="Process\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Grasshopper" Version="7.29.23107.3001" />
