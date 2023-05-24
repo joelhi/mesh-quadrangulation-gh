@@ -21,6 +21,8 @@ To generate a quadrangulated FE mesh, create a triangulation, and do a quadrangu
 
 ![Example_planar](img/planar_mesh.png)
 
+Left is the triangular mesh, middle the quadrangulated and right the smooth quad-mesh. The red points are pinned during the process.
+
 This is quite work in progress still, and may be extended to feature more graph based mesh processing algorithms in the future; beyond what's needed for quadrangulation.
 
 ### Contents
