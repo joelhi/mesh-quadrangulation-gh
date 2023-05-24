@@ -39,4 +39,4 @@ The second is the gh-plugin, which for now only has one component: 'Quadrangulat
 - [ ] Catmull-Clark algorithm (with option to fix points) for smoothing
 - [ ] Handle non-convex matching cases.
 - [ ] Expose explicit steps in process as gh components
-- [ ] Implement Blossom algorithm for computing matchings.
+- [ ] Implement [Blossom algorithm](https://en.wikipedia.org/wiki/Blossom_algorithm) for computing matchings.
