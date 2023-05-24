@@ -11,12 +11,13 @@ A grasshopper component to quadrangulate tri-meshes by merging faces using a gra
 This stems from the need to get quad based meshes for FE-analysis. Many good tools exist to do smooth adaptable triangulations in gh but few
 offer "sofistik" style FE-suitable meshes. This can be done through the process of *Triangulation -> Quadrangulation -> Smoothing*.
 
-This is quite work in progress still, and may be extended to feature more graph based mesh processing algorithms in the future beyond what's needed for quadrangulation.
+The process works as follows. Given a quality triangulated mesh (in this case provided using the remeshing in [this toolkit])(https://github.com/joelhi/g3-gh), the quadrangulation works by constructing a graph for the face connectivity, and walking this graph according to a *breadth-first* or *depth-first* search, finding a set of [**matchings**](https://en.wikipedia.org/wiki/Matching_(graph_theory)), pairs of triangles that can be merged into quads.
 
 An example of the process is shown below.
 
 ![Example](img/quadrangulation2.gif)
 
+This is quite work in progress still, and may be extended to feature more graph based mesh processing algorithms in the future; beyond what's needed for quadrangulation.
 
 ### Contents
 
@@ -34,7 +35,9 @@ The second is the gh-plugin, which for now only has one component: 'Quadrangulat
 
 - [x] Base graph structure
 - [x] Quadrangulation algorithm
+- [ ] Laplacian face smoothing (with option to fix points)
 - [ ] Handle loops (faces) in graph structure
 - [ ] Catmull-Clark algorithm (with option to fix points) for smoothing
 - [ ] Handle non-convex matching cases.
 - [ ] Expose explicit steps in process as gh components
+- [ ] Implement [Blossom algorithm](https://en.wikipedia.org/wiki/Blossom_algorithm) for computing matchings.
