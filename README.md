@@ -11,12 +11,11 @@ A grasshopper component to quadrangulate tri-meshes by merging faces using a gra
 This stems from the need to get quad based meshes for FE-analysis. Many good tools exist to do smooth adaptable triangulations in gh but few
 offer "sofistik" style FE-suitable meshes. This can be done through the process of *Triangulation -> Quadrangulation -> Smoothing*.
 
-This is quite work in progress still, and may be extended to feature more graph based mesh processing algorithms in the future beyond what's needed for quadrangulation.
-
 An example of the process is shown below.
 
 ![Example](img/quadrangulation2.gif)
 
+This is quite work in progress still, and may be extended to feature more graph based mesh processing algorithms in the future; beyond what's needed for quadrangulation.
 
 ### Contents
 
