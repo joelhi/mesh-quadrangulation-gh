@@ -17,6 +17,10 @@ An example of the process is shown below.
 
 ![Example](img/quadrangulation2.gif)
 
+To generate a quadrangulated FE mesh, create a triangulation, and do a quadrangulation, followed by a smooth. Make sure to fix the nodes used for supports or edges in the smoothing process. An example file can be found in the *example* folder which shows the following geometry.
+
+![Example_planar](img/planar_mesh.png)
+
 This is quite work in progress still, and may be extended to feature more graph based mesh processing algorithms in the future; beyond what's needed for quadrangulation.
 
 ### Contents
@@ -28,7 +32,7 @@ The repo has two projects.
 
 The first one features a graph data structure and the processing algorithms, along with some conversion helpers to and from Rhino geometry.
 
-The second is the gh-plugin, which for now only has one component: 'Quadrangulate Meshes'
+The second is the gh-plugin, which for now only has two component: *Quadrangulate Meshes* and *Laplacian Smooth*
 
 
 ### Todo
