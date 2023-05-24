@@ -8,11 +8,11 @@ using Rhino.Geometry;
 
 using MeshGraphLib.Core.Helper;
 using MeshGraphLib.Core;
-using MeshGraphLib.Walk;
-using MeshGraphLib.Walk.Interfaces;
-using MeshGraphLib.Match;
-using MeshGraphLib.Match.Selection;
-using MeshGraphLib.Process;
+using MeshGraphLib.Algorithms.Walk;
+using MeshGraphLib.Algorithms.Walk.Interfaces;
+using MeshGraphLib.Algorithms.Match;
+using MeshGraphLib.Algorithms.Match.Selection;
+using MeshGraphLib.Algorithms;
 
 namespace MeshQuadrangulation
 {

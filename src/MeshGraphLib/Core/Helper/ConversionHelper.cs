@@ -68,11 +68,11 @@ namespace MeshGraphLib.Core.Helper
 
         private static XYZ GetFaceCenter(MeshFace face, Mesh mesh)
         {
-            if(face.IsTriangle)
+            if (face.IsTriangle)
             {
                 return (mesh.Vertices[face[0]] + mesh.Vertices[face[1]] + mesh.Vertices[face[2]]).ToXYZ() / 3;
             }
-            
+
             return (mesh.Vertices[face[0]] + mesh.Vertices[face[1]] + mesh.Vertices[face[2]] + mesh.Vertices[face[3]]).ToXYZ() / 3;
         }
 
@@ -129,9 +129,9 @@ namespace MeshGraphLib.Core.Helper
             {
                 int size = nodes.Length * sizeof(XYZ);
 
-                fixed(void* nd_ptr = &nodes[0])
+                fixed (void* nd_ptr = &nodes[0])
                 {
-                    fixed(void* pt_ptr = &rh_pts[0])
+                    fixed (void* pt_ptr = &rh_pts[0])
                     {
                         Buffer.MemoryCopy(nd_ptr, pt_ptr, size, size);
                     }
@@ -153,9 +153,9 @@ namespace MeshGraphLib.Core.Helper
             {
                 int size = nodes.Length * sizeof(XYZ);
 
-                fixed(void* nd_ptr = &nodes[0])
+                fixed (void* nd_ptr = &nodes[0])
                 {
-                    fixed(void* pt_ptr = &rh_pts[0])
+                    fixed (void* pt_ptr = &rh_pts[0])
                     {
                         Buffer.MemoryCopy(pt_ptr, nd_ptr, size, size);
                     }
@@ -173,9 +173,9 @@ namespace MeshGraphLib.Core.Helper
             {
                 int size = edges.Length * sizeof(EdgeXYZ);
 
-                fixed(void* nd_ptr = &edges[0])
+                fixed (void* nd_ptr = &edges[0])
                 {
-                    fixed(void* pt_ptr = &rh_lines[0])
+                    fixed (void* pt_ptr = &rh_lines[0])
                     {
                         Buffer.MemoryCopy(pt_ptr, nd_ptr, size, size);
                     }
@@ -193,9 +193,9 @@ namespace MeshGraphLib.Core.Helper
             {
                 int size = edges.Length * sizeof(Line);
 
-                fixed(void* e_ptr = &edges[0])
+                fixed (void* e_ptr = &edges[0])
                 {
-                    fixed(void* ln_ptr = &rh_lns[0])
+                    fixed (void* ln_ptr = &rh_lns[0])
                     {
                         Buffer.MemoryCopy(e_ptr, ln_ptr, size, size);
                     }

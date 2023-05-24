@@ -11,7 +11,7 @@ namespace MeshGraphLib.Core.Helper
             global_spatial_tolerance = val;
         }
 
-        public static double GetGlobalTol() => global_spatial_tolerance; 
+        public static double GetGlobalTol() => global_spatial_tolerance;
 
         private static double global_spatial_tolerance = 1e-7;
 
@@ -34,9 +34,9 @@ namespace MeshGraphLib.Core.Helper
 
             foreach (EdgeXYZ edge in edges)
             {
-                if(hashes.Add(edge.A.SpatialHash)){ unique_nodes.Add(edge.A);}
+                if (hashes.Add(edge.A.SpatialHash)) { unique_nodes.Add(edge.A); }
 
-                if(hashes.Add(edge.B.SpatialHash)){ unique_nodes.Add(edge.B); }
+                if (hashes.Add(edge.B.SpatialHash)) { unique_nodes.Add(edge.B); }
             }
 
             return unique_nodes;
@@ -44,7 +44,7 @@ namespace MeshGraphLib.Core.Helper
 
         public static int ComputeIndexHash(int id_a, int id_b)
         {
-            if(id_a >= id_b)
+            if (id_a >= id_b)
             {
                 return (23 * 37 + id_a) * 37 + id_b;
             }
@@ -67,11 +67,11 @@ namespace MeshGraphLib.Core.Helper
             return hash;
         }
 
-        public static double Length(this XYZ xyz) => Math.Sqrt(Math.Pow(xyz.x,2) + Math.Pow(xyz.y,2) + Math.Pow(xyz.z,2));
+        public static double Length(this XYZ xyz) => Math.Sqrt(Math.Pow(xyz.x, 2) + Math.Pow(xyz.y, 2) + Math.Pow(xyz.z, 2));
 
         public static double Length(this EdgeXYZ edge) => DistanceTo(edge.A, edge.B);
-        
-        public static double DistanceTo(this XYZ a, XYZ b) => (b- a).Length();
+
+        public static double DistanceTo(this XYZ a, XYZ b) => (b - a).Length();
     }
 
 }

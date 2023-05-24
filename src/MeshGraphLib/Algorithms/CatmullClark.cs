@@ -1,5 +1,5 @@
 ﻿using System;
-namespace MeshGraphLib.Process
+namespace MeshGraphLib.Algorithms
 {
 	public class CatmullClark
 	{

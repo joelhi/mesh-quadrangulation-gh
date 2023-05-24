@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using MeshGraphLib.Core;
 
-namespace MeshGraphLib.Walk.Interfaces
+namespace MeshGraphLib.Algorithms.Walk.Interfaces
 {
     public interface IWalk
     {
@@ -10,5 +10,5 @@ namespace MeshGraphLib.Walk.Interfaces
     }
 }
 
-    
+
 

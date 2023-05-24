@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using MeshGraphLib.Core;
-using MeshGraphLib.Match.Selection;
+using MeshGraphLib.Algorithms.Match.Selection;
 
-namespace MeshGraphLib.Match
+namespace MeshGraphLib.Algorithms.Match
 {
 	public class BFSMatching
 	{

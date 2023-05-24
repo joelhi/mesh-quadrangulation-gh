@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Collections.Generic;
 using MeshGraphLib.Core;
-using MeshGraphLib.Walk.Interfaces;
+using MeshGraphLib.Algorithms.Walk.Interfaces;
 
-namespace MeshGraphLib.Walk
+namespace MeshGraphLib.Algorithms.Walk
 {
     public class WalkBFS : IWalk
     {

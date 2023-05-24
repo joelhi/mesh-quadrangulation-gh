@@ -6,20 +6,20 @@ using Grasshopper.Kernel.Graphs;
 using MeshGraphLib.Core;
 using MeshGraphLib.Core.Helper;
 
-namespace MeshGraphLib.Match.Selection
+namespace MeshGraphLib.Algorithms.Match.Selection
 {
-	public class EdgeLengthSelection : IMatchSelection
-	{
-		public EdgeLengthSelection()
-		{
-		}
+    public class EdgeLengthSelection : IMatchSelection
+    {
+        public EdgeLengthSelection()
+        {
+        }
 
         public iEdge PickMatching(IEnumerable<iEdge> edges, GraphXYZ graph, out int[] remaining_nodes)
         {
             double minDistance = double.MaxValue;
             iEdge selected_edge = new iEdge(-1, -1);
 
-            foreach(iEdge e in edges)
+            foreach (iEdge e in edges)
             {
                 double len = graph.GetNode(e.id_a).DistanceTo(graph.GetNode(e.id_b));
 
@@ -32,7 +32,7 @@ namespace MeshGraphLib.Match.Selection
 
             HashSet<int> remaining = graph.GetConnectedNodes(selected_edge.id_b);
 
-            foreach (var e in edges){ remaining.Add(e.id_b); }
+            foreach (var e in edges) { remaining.Add(e.id_b); }
 
             remaining.Remove(selected_edge.id_a);
             remaining.Remove(selected_edge.id_b);

@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using MeshGraphLib.Core;
-using MeshGraphLib.Match;
-using MeshGraphLib.Match.Selection;
+using MeshGraphLib.Algorithms.Match;
+using MeshGraphLib.Algorithms.Match.Selection;
 using Rhino.Geometry;
 
-namespace MeshGraphLib.Process
+namespace MeshGraphLib.Algorithms
 {
     public class Quadrangulation
     {
