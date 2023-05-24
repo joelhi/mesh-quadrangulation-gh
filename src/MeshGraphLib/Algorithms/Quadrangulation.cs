@@ -19,7 +19,7 @@ namespace MeshGraphLib.Algorithms
             this.faces = faces;
         }
 
-        public iFace[] Quadrangulate(int[] sources)
+        public iFace[] Quadrangulate(IEnumerable<int> sources)
         {
             var matchings = matching.ComputeMatchings(sources, out List<int> singles);
             return MergeAllFaces(this.faces, matchings, singles);
@@ -53,7 +53,7 @@ namespace MeshGraphLib.Algorithms
                 int[] b_arr = new int[3] { B.A, B.B, B.C };
 
                 List<int> shared = new List<int>();
-                HashSet<int> sharedIndexA = new HashSet<int>();
+                HashSet<int> shared_index_A = new HashSet<int>();
                 HashSet<int> sharedIndexB = new HashSet<int>();
 
                 for (int i = 0; i < 3; i++)
@@ -67,27 +67,27 @@ namespace MeshGraphLib.Algorithms
 
                     if (index >= 0)
                     {
-                        sharedIndexA.Add(i); sharedIndexB.Add(index); shared.Add(a_arr[i]);
+                        shared_index_A.Add(i); sharedIndexB.Add(index); shared.Add(a_arr[i]);
                     }
                 }
 
-                int notSharedB = -1;
+                int not_shared = -1;
                 for (int i = 0; i < 3; i++)
                 {
-                    if (!sharedIndexB.Contains(i)) { notSharedB = b_arr[i]; }
+                    if (!sharedIndexB.Contains(i)) { not_shared = b_arr[i]; }
                 }
 
-                if (sharedIndexA.Contains(0) && sharedIndexA.Contains(1))
+                if (shared_index_A.Contains(0) && shared_index_A.Contains(1))
                 {
-                    final.A = a_arr[0]; final.B = notSharedB; final.C = a_arr[1]; final.D = a_arr[2];
+                    final.A = a_arr[0]; final.B = not_shared; final.C = a_arr[1]; final.D = a_arr[2];
                 }
-                else if (sharedIndexA.Contains(0))
+                else if (shared_index_A.Contains(0))
                 {
-                    final.A = a_arr[0]; final.B = a_arr[1]; final.C = a_arr[2]; final.D = notSharedB;
+                    final.A = a_arr[0]; final.B = a_arr[1]; final.C = a_arr[2]; final.D = not_shared;
                 }
                 else
                 {
-                    final.A = a_arr[0]; final.B = a_arr[1]; final.C = notSharedB; final.D = a_arr[2];
+                    final.A = a_arr[0]; final.B = a_arr[1]; final.C = not_shared; final.D = a_arr[2];
                 }
 
             }
