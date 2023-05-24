@@ -37,3 +37,4 @@ The second is the gh-plugin, which for now only has one component: 'Quadrangulat
 - [ ] Handle loops (faces) in graph structure
 - [ ] Catmull-Clark algorithm (with option to fix points) for smoothing
 - [ ] Handle non-convex matching cases.
+- [ ] Expose explicit steps in process as gh components
