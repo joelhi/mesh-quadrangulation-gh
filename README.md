@@ -26,7 +26,7 @@ The repo has two projects.
 - **MeshGraphLib**
 - **MeshQuadrangulationGH**
 
-The first one features a graph data structure and the processing algorithms, along with some converion helpers to and from Rhino geometry.
+The first one features a graph data structure and the processing algorithms, along with some conversion helpers to and from Rhino geometry.
 
 The second is the gh-plugin, which for now only has one component: 'Quadrangulate Meshes'
 
