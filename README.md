@@ -47,3 +47,5 @@ The second is the gh-plugin, which for now only has two component: *Quadrangulat
 - [ ] Handle non-convex matching cases.
 - [ ] Expose explicit steps in process as gh components
 - [ ] Implement [Blossom algorithm](https://en.wikipedia.org/wiki/Blossom_algorithm) for computing matchings.
+- [ ] Grasshopper Icons
+- [ ] Make algorithms etc. more modular
