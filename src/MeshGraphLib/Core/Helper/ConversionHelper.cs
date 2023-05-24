@@ -24,7 +24,9 @@ namespace MeshGraphLib.Core.Helper
 
             for (int i = 0; i < mesh.Vertices.Count; i++)
             {
-                mesh.Vertices.GetConnectedVertices(i).Select(j => graph.TryAddEdge(i, j));
+                int[] connected = mesh.Vertices.GetConnectedVertices(i);
+
+                for (int j = 0; j < connected.Length; j++) { graph.TryAddEdge(i, connected[j]); }
             }
 
             return graph;

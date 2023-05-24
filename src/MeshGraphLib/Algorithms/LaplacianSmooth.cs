@@ -25,14 +25,21 @@ namespace MeshGraphLib.Algorithms
 			{
 				for (int i = 0; i < vertex_graph.NodeCount; i++)
 				{
-					if(fixed_v.Contains(i)) { continue; }
+					if(fixed_v.Contains(i))
+					{
+						smooth_nodes[i] = nodes[i];
+						continue;
+					}
 
 					HashSet<int> connected = vertex_graph.GetConnectedNodes(i);
 
 					XYZ avg = new XYZ(0, 0, 0);
-					foreach (int id in connected){ avg += nodes[i]; }
+					foreach (int id in connected)
+					{
+						avg = avg + nodes[id];
+					}
 
-					avg /= connected.Count;
+					avg = avg / connected.Count;
 
 					smooth_nodes[i] = avg;
 				}
