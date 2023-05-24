@@ -31,17 +31,10 @@ namespace MeshGraphLib.Algorithms
                         continue;
                     }
 
-                    HashSet<int> connected = vertex_graph.GetConnectedNodes(i);
-
                     XYZ avg = new XYZ(0, 0, 0);
-                    foreach (int id in connected)
-                    {
-                        avg = avg + nodes[id];
-                    }
+                    foreach (int id in vertex_graph.GetConnectedNodes(i)){ avg += nodes[id]; }
 
-                    avg = avg / connected.Count;
-
-                    smooth_nodes[i] = avg;
+                    smooth_nodes[i] = avg / vertex_graph.GetConnectedNodes(i).Count;
                 }
 
                 Array.Copy(smooth_nodes, nodes, smooth_nodes.Length);
