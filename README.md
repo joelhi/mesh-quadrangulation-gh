@@ -6,7 +6,7 @@
 > 
 > This repo is still very much work in progress.
 
-A grasshopper component to quadrangulate tri-meshes by merging faces using a graph-matching approach.
+A set of grasshopper components to quadrangulate tri-meshes by merging faces using a graph-matching approach.
 
 This stems from the need to get quad based meshes for FE-analysis. Many good tools exist to do smooth adaptable triangulations in gh but few
 offer "sofistik" style FE-suitable meshes. This can be done through the process of *Triangulation -> Quadrangulation -> Smoothing*.
@@ -19,7 +19,7 @@ An example of the process is shown below.
 
 To generate a quadrangulated FE mesh, create a triangulation, and do a quadrangulation, followed by a smooth. Make sure to fix the nodes used for supports or edges in the smoothing process. An example file can be found in the *example* folder which shows the following geometry.
 
-![Example_planar](img/planar_mesh.png)
+![Example_planar](img/planar_mesh_crop.png)
 
 Left is the triangular mesh, middle the quadrangulated and right the smooth quad-mesh. The red points are pinned during the process.
 
@@ -41,7 +41,7 @@ The second is the gh-plugin, which for now only has two component: *Quadrangulat
 
 - [x] Base graph structure
 - [x] Quadrangulation algorithm
-- [ ] Laplacian face smoothing (with option to fix points)
+- [x] Laplacian smoothing (with option to fix points)
 - [ ] Handle loops (faces) in graph structure
 - [ ] Catmull-Clark algorithm (with option to fix points) for smoothing
 - [ ] Handle non-convex matching cases.
