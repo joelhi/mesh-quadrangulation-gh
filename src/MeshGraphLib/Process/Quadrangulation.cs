@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MeshGraphLib.Core;
 using MeshGraphLib.Match;
@@ -7,17 +7,17 @@ using Rhino.Geometry;
 
 namespace MeshGraphLib.Process
 {
-	public class Quadrangulation
-	{
+    public class Quadrangulation
+    {
         private BFSMatching matching;
 
         private iFace[] faces;
 
-		public Quadrangulation(GraphXYZ face_graph, iFace[] faces, IMatchSelection selection_criteria)
-		{
+        public Quadrangulation(GraphXYZ face_graph, iFace[] faces, IMatchSelection selection_criteria)
+        {
             this.matching = new BFSMatching(face_graph, selection_criteria);
             this.faces = faces;
-		}
+        }
 
         public iFace[] Quadrangulate(int[] sources)
         {
@@ -25,8 +25,8 @@ namespace MeshGraphLib.Process
             return MergeAllFaces(this.faces, matchings, singles);
         }
 
-		public iFace[] MergeAllFaces(iFace[] faces, List<iEdge> matchings, List<int> singles)
-		{
+        public iFace[] MergeAllFaces(iFace[] faces, List<iEdge> matchings, List<int> singles)
+        {
             iFace[] merged = new iFace[matchings.Count + singles.Count];
 
             for (int i = 0; i < matchings.Count; i++)
@@ -40,17 +40,17 @@ namespace MeshGraphLib.Process
             }
 
             return merged;
-		}
+        }
 
-		public iFace MergeTrianglesToQuads(iFace A, iFace B)
-		{
+        public iFace MergeTrianglesToQuads(iFace A, iFace B)
+        {
 
             iFace final = iFace.Unset;
 
             if (A.IsTriangle && B.IsTriangle)
             {
-                int[] a_arr = new int[3]{A.A, A.B, A.C};
-                int[] b_arr = new int[3]{B.A, B.B, B.C}; 
+                int[] a_arr = new int[3] { A.A, A.B, A.C };
+                int[] b_arr = new int[3] { B.A, B.B, B.C };
 
                 List<int> shared = new List<int>();
                 HashSet<int> sharedIndexA = new HashSet<int>();
@@ -74,7 +74,7 @@ namespace MeshGraphLib.Process
                 int notSharedB = -1;
                 for (int i = 0; i < 3; i++)
                 {
-                    if (!sharedIndexB.Contains(i)){ notSharedB = b_arr[i];}
+                    if (!sharedIndexB.Contains(i)) { notSharedB = b_arr[i]; }
                 }
 
                 if (sharedIndexA.Contains(0) && sharedIndexA.Contains(1))
@@ -91,10 +91,9 @@ namespace MeshGraphLib.Process
                 }
 
             }
-            else{ throw new Exception("This can only be done for triangles."); }
+            else { throw new Exception("This can only be done for triangles."); }
 
             return final;
         }
-	}
+    }
 }
-

@@ -45,7 +45,6 @@ namespace MeshQuadrangulation
     /// </summary>
     protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
     {
-      
       pManager.AddMeshParameter("Mesh","M","Quadrangulated Mesh",GH_ParamAccess.item);
       pManager.AddIntegerParameter("Sources","S","Sources for the search.",GH_ParamAccess.list);
     }
