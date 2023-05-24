@@ -1,131 +1,131 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Rhino.Geometry;
 
 namespace MeshGraphLib.Core
 {
-	public class GraphXYZ
-	{
-		private List<XYZ> nodes_xyz {get; set;} 
+    public class GraphXYZ
+    {
+        private List<XYZ> nodes_xyz { get; set; }
 
-		private Dictionary<int, int> nodes_map {get; set;} 
-		
-		private List<HashSet<int>> nodes_conn {get; set;}
+        private Dictionary<int, int> nodes_map { get; set; }
 
-		public bool IsDirected {get; private set;}
+        private List<HashSet<int>> nodes_conn { get; set; }
 
-		public GraphXYZ(bool directed = false)
-		{
-			nodes_xyz = new List<XYZ>();
-			nodes_map = new Dictionary<int, int>();
-			nodes_conn = new List<HashSet<int>>();
+        public bool IsDirected { get; private set; }
 
-			this.IsDirected = directed;
-		}
+        public GraphXYZ(bool directed = false)
+        {
+            nodes_xyz = new List<XYZ>();
+            nodes_map = new Dictionary<int, int>();
+            nodes_conn = new List<HashSet<int>>();
 
-		public bool HasNode(XYZ node) => nodes_map.ContainsKey(node.SpatialHash);
+            this.IsDirected = directed;
+        }
 
-		public int NodeIndex(XYZ node) => nodes_map[node.SpatialHash];
+        public bool HasNode(XYZ node) => nodes_map.ContainsKey(node.SpatialHash);
 
-		public bool HasEdge(EdgeXYZ edge) => HasEdge(edge.A, edge.B);
+        public int NodeIndex(XYZ node) => nodes_map[node.SpatialHash];
 
-		public bool HasEdge(XYZ node_a, XYZ node_b) => HasEdge(NodeIndex(node_a), NodeIndex(node_b));
+        public bool HasEdge(EdgeXYZ edge) => HasEdge(edge.A, edge.B);
 
-		public bool HasEdge(int id_a, int id_b)
-		{
-			if(id_a >= nodes_xyz.Count || id_b >= nodes_xyz.Count) { return false; }
+        public bool HasEdge(XYZ node_a, XYZ node_b) => HasEdge(NodeIndex(node_a), NodeIndex(node_b));
 
-			if(nodes_conn[id_a].Contains(id_b)){ return true; }
+        public bool HasEdge(int id_a, int id_b)
+        {
+            if (id_a >= nodes_xyz.Count || id_b >= nodes_xyz.Count) { return false; }
 
-			if(IsDirected){ return false; }
+            if (nodes_conn[id_a].Contains(id_b)) { return true; }
 
-			return nodes_conn[id_b].Contains(id_a);
-		}
+            if (IsDirected) { return false; }
 
-		public HashSet<int> GetConnectedNodes(int id) => nodes_conn[id];
+            return nodes_conn[id_b].Contains(id_a);
+        }
 
-		public int NodeCount => nodes_xyz.Count;
+        public HashSet<int> GetConnectedNodes(int id) => nodes_conn[id];
 
-		public List<XYZ> TryAddNodes(IEnumerable<XYZ> nodes)
-		{
-			List<XYZ> failed = new List<XYZ>();
+        public int NodeCount => nodes_xyz.Count;
 
-			foreach (XYZ node in nodes)
-			{
-				if(!TryAddNode(node))
-				{
-					failed.Add(node);
-				}
-			}
+        public List<XYZ> TryAddNodes(IEnumerable<XYZ> nodes)
+        {
+            List<XYZ> failed = new List<XYZ>();
 
-			return failed;
-		}
+            foreach (XYZ node in nodes)
+            {
+                if (!TryAddNode(node))
+                {
+                    failed.Add(node);
+                }
+            }
 
-		public bool TryAddNode(XYZ node)
-		{
-			if(HasNode(node))
-			{
-				return false;
-			}
+            return failed;
+        }
 
-			nodes_map.Add(node.SpatialHash, nodes_xyz.Count);
-			nodes_xyz.Add(node);
-			nodes_conn.Add(new HashSet<int>());
-			
-			return true;
-		}
+        public bool TryAddNode(XYZ node)
+        {
+            if (HasNode(node))
+            {
+                return false;
+            }
 
-		public bool TryAddEdge(EdgeXYZ edge, bool add_nodes = false) => TryAddEdge(edge.A, edge.B, add_nodes);
+            nodes_map.Add(node.SpatialHash, nodes_xyz.Count);
+            nodes_xyz.Add(node);
+            nodes_conn.Add(new HashSet<int>());
 
-		public bool TryAddEdge(XYZ node_a, XYZ node_b, bool add_nodes = false)
-		{
-			if(add_nodes)
-			{
-				TryAddNode(node_a);
-				TryAddNode(node_b);
-			}
+            return true;
+        }
 
-			return TryAddEdge(NodeIndex(node_a),NodeIndex(node_b), add_nodes);
-		}
+        public bool TryAddEdge(EdgeXYZ edge, bool add_nodes = false) => TryAddEdge(edge.A, edge.B, add_nodes);
 
-		public bool TryAddEdge(int id_a, int id_b, bool add_nodes = false)
-		{
-			if(HasEdge(id_a, id_b)){ return false; }
+        public bool TryAddEdge(XYZ node_a, XYZ node_b, bool add_nodes = false)
+        {
+            if (add_nodes)
+            {
+                TryAddNode(node_a);
+                TryAddNode(node_b);
+            }
 
-			if (id_a >= nodes_xyz.Count || id_b >= nodes_xyz.Count) { return false; }
+            return TryAddEdge(NodeIndex(node_a), NodeIndex(node_b), add_nodes);
+        }
 
-			nodes_conn[id_a].Add(id_b);
+        public bool TryAddEdge(int id_a, int id_b, bool add_nodes = false)
+        {
+            if (HasEdge(id_a, id_b)) { return false; }
 
-			if(IsDirected){ return true; }
+            if (id_a >= nodes_xyz.Count || id_b >= nodes_xyz.Count) { return false; }
 
-			nodes_conn[id_b].Add(id_a);
+            nodes_conn[id_a].Add(id_b);
 
-			return true;
-		}
+            if (IsDirected) { return true; }
 
-		public EdgeXYZ[] GetEdges()
-		{
-			List<EdgeXYZ> edges = new List<EdgeXYZ>();
+            nodes_conn[id_b].Add(id_a);
 
-			HashSet<int> visited_nodes = new HashSet<int>();
-			
-			for (int i = 0; i < nodes_xyz.Count; i++)
-			{
-				visited_nodes.Add(i);
+            return true;
+        }
 
-				foreach (int id in nodes_conn[i])
-				{
-					if(visited_nodes.Contains(id)){ continue; }
+        public EdgeXYZ[] GetEdges()
+        {
+            List<EdgeXYZ> edges = new List<EdgeXYZ>();
 
-					edges.Add(new EdgeXYZ(nodes_xyz[i], nodes_xyz[id]));
-				}
-			}
+            HashSet<int> visited_nodes = new HashSet<int>();
 
-			return edges.ToArray();
-		}
+            for (int i = 0; i < nodes_xyz.Count; i++)
+            {
+                visited_nodes.Add(i);
 
-		public iEdge[] GetEdgesConnectivity()
-		{
+                foreach (int id in nodes_conn[i])
+                {
+                    if (visited_nodes.Contains(id)) { continue; }
+
+                    edges.Add(new EdgeXYZ(nodes_xyz[i], nodes_xyz[id]));
+                }
+            }
+
+            return edges.ToArray();
+        }
+
+        public iEdge[] GetEdgesConnectivity()
+        {
             List<iEdge> edges = new List<iEdge>();
 
             HashSet<int> visited_nodes = new HashSet<int>();
@@ -136,7 +136,7 @@ namespace MeshGraphLib.Core
 
                 foreach (int id in nodes_conn[i])
                 {
-                    if (visited_nodes.Contains(id)){ continue; }
+                    if (visited_nodes.Contains(id)) { continue; }
 
                     edges.Add(new iEdge(i, id));
                 }
@@ -145,22 +145,22 @@ namespace MeshGraphLib.Core
             return edges.ToArray();
         }
 
-		public XYZ[] GetNodes() => nodes_xyz.ToArray();
+        public XYZ[] GetNodes() => nodes_xyz.ToArray();
 
-		public XYZ GetNode(int id) => nodes_xyz[id];
+        public XYZ GetNode(int id) => nodes_xyz[id];
 
         public bool TryGetNode(int id, out XYZ node)
-		{
-			if(id >= nodes_xyz.Count)
-			{
-				node = new XYZ(0,0,0);
-				return false;
-			}
+        {
+            if (id >= nodes_xyz.Count)
+            {
+                node = new XYZ(0, 0, 0);
+                return false;
+            }
 
-			node = nodes_xyz[id];
+            node = nodes_xyz[id];
 
-			return true;
-		}
+            return true;
+        }
     }
 }
 
