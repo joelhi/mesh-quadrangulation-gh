@@ -85,10 +85,10 @@ namespace MeshGraphLib.Core
                 TryAddNode(node_b);
             }
 
-            return TryAddEdge(NodeIndex(node_a), NodeIndex(node_b), add_nodes);
+            return TryAddEdge(NodeIndex(node_a), NodeIndex(node_b));
         }
 
-        public bool TryAddEdge(int id_a, int id_b, bool add_nodes = false)
+        public bool TryAddEdge(int id_a, int id_b)
         {
             if (HasEdge(id_a, id_b)) { return false; }
 
@@ -160,6 +160,41 @@ namespace MeshGraphLib.Core
             node = nodes_xyz[id];
 
             return true;
+        }
+
+        public List<iFace> GetFaces()
+        {
+            List<iFace> faces = new List<iFace>();
+
+            for (int i = 0; i < NodeCount; i++)
+            {
+                foreach (int connected_A in GetConnectedNodes(i))
+                {
+                    foreach (int connected_B in GetConnectedNodes(i))
+                    { 
+                        HashSet<int> next_connections = GetConnectedNodes(connected_A);
+
+                        if(next_connections.Contains(i))
+                        {
+                            faces.Add(new iFace(i, connected_A, connected_B));
+                            break;
+                        }
+
+                        foreach (int connected_C in GetConnectedNodes(i))
+                        { 
+                            HashSet<int> next_connections_b = GetConnectedNodes(connected_A);
+
+                            if(next_connections.Contains(i))
+                            {
+                                faces.Add(new iFace(i, connected_A, connected_B, connected_C));
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return faces;
         }
     }
 }

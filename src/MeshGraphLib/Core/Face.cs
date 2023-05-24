@@ -28,6 +28,37 @@ namespace MeshGraphLib.Core
 
         public bool IsTriangle => (this.D == this.C);
 
+        public int[] AsArray()
+        {
+            if(IsTriangle){ return new int[3] {A, B , C};}
+            else { return new int[4] {A, B , C, D};}
+        }
+
+        public iEdge[] GetEdges()
+        {
+            if(IsTriangle)
+            {
+                iEdge[] edges = new iEdge[3];
+
+                edges[0] = new iEdge(A, B);
+                edges[1] = new iEdge(B, C);
+                edges[2] = new iEdge(C, A);
+
+                return edges;
+            }
+            else
+            {
+                iEdge[] edges = new iEdge[4];
+
+                edges[0] = new iEdge(A, B);
+                edges[1] = new iEdge(B, C);
+                edges[2] = new iEdge(C, D);
+                edges[3] = new iEdge(D, A);
+
+                return edges;
+            }
+        }
+
         public static iFace Unset => new iFace(-1, -1, -1);
     }
 }

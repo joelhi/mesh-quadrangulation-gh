@@ -16,6 +16,18 @@ namespace MeshGraphLib.Core
             this.id_a = id_a;
             this.id_b = id_b;
         }
+
+        public bool IsIdentical(iEdge e, bool directed = false)
+        {
+            if(directed)
+            {
+                return (e.id_a == id_a) && (e.id_b == id_b);
+            }
+            else
+            {
+                return ((e.id_a == id_a) && (e.id_b == id_b)) || ((e.id_a == id_b) && (e.id_b == id_a));
+            }
+        }
     }
 
     public struct EdgeXYZ
