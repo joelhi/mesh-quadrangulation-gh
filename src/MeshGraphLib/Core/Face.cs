@@ -60,6 +60,24 @@ namespace MeshGraphLib.Core
         }
 
         public static iFace Unset => new iFace(-1, -1, -1);
+
+        private bool HasSharedEdge(iFace B, out iEdge edge)
+		{
+			foreach (iEdge e1 in GetEdges())
+			{
+				foreach (iEdge e2 in B.GetEdges())
+				{
+					if(e1.IsIdentical(e2)) 
+                    {
+                        edge =  e1;
+                        return true;
+                    }
+				}
+			}
+
+			edge = new iEdge(-1 ,-1);
+            return false;
+		}
     }
 }
 

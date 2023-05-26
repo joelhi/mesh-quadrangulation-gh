@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MeshGraphLib.Core.Helper;
 
 namespace MeshGraphLib.Core
@@ -45,6 +46,25 @@ namespace MeshGraphLib.Core
         public static XYZ operator *(XYZ xyz, double val) => new XYZ(xyz.x * val, xyz.y * val, xyz.z * val);
 
         public static XYZ operator /(XYZ xyz, double val) => new XYZ(xyz.x / val, xyz.y / val, xyz.z / val);
+
+        public override string ToString()
+        {
+            return $"({x}, {y}, {z})";
+        }
+
+        public static XYZ Average(IEnumerable<XYZ> pts)
+        {
+            XYZ avg = new XYZ(0, 0 ,0);
+
+            int num = 0;
+            foreach (XYZ pt in pts)
+            {
+                avg += pt;
+                num++;
+            }
+
+            return avg / num;
+        }
 
     }
 }

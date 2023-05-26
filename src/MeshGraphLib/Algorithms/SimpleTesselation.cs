@@ -29,6 +29,10 @@ namespace MeshGraphLib.Algorithms
 				XYZ[] edge_center = ComputeEdgeCenters(edges);
 
 			}
+
+            out_faces = new iFace[0];
+
+            return null;
 		}
 
 		private XYZ ComputeFaceCenter(int i)

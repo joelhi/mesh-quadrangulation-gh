@@ -82,6 +82,11 @@ namespace MeshGraphLib.Core.Helper
         {
             MeshFace[] rh_faces = mesh.Faces.ToArray();
 
+            if(rh_faces.Length == 0)
+            {
+                return new iFace[0];
+            }
+
             iFace[] faces = new iFace[rh_faces.Length];
 
             unsafe
@@ -102,9 +107,12 @@ namespace MeshGraphLib.Core.Helper
 
         public static MeshFace[] ToRhino(this iFace[] faces)
         {
+            if(faces.Length == 0)
+            {
+                return new MeshFace[0];
+            }
 
             MeshFace[] rh_faces = new MeshFace[faces.Length];
-
             unsafe
             {
                 int size = faces.Length * sizeof(MeshFace);
@@ -125,8 +133,12 @@ namespace MeshGraphLib.Core.Helper
 
         public static Point3d[] ToRhino(this XYZ[] nodes)
         {
-            Point3d[] rh_pts = new Point3d[nodes.Length];
+            if(nodes.Length == 0)
+            {
+                return new Point3d[0];
+            }
 
+            Point3d[] rh_pts = new Point3d[nodes.Length];
             unsafe
             {
                 int size = nodes.Length * sizeof(XYZ);
@@ -149,8 +161,12 @@ namespace MeshGraphLib.Core.Helper
 
         public static XYZ[] ToXYZ(this Point3d[] rh_pts)
         {
-            XYZ[] nodes = new XYZ[rh_pts.Length];
+            if(rh_pts.Length == 0)
+            {
+                return new XYZ[0];
+            }
 
+            XYZ[] nodes = new XYZ[rh_pts.Length];
             unsafe
             {
                 int size = nodes.Length * sizeof(XYZ);
@@ -189,8 +205,12 @@ namespace MeshGraphLib.Core.Helper
 
         public static Line[] ToRhino(this EdgeXYZ[] edges)
         {
-            Line[] rh_lns = new Line[edges.Length];
+            if(edges.Length == 0)
+            {
+                return new Line[0];
+            }
 
+            Line[] rh_lns = new Line[edges.Length];
             unsafe
             {
                 int size = edges.Length * sizeof(Line);

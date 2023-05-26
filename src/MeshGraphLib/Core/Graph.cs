@@ -149,6 +149,15 @@ namespace MeshGraphLib.Core
 
         public XYZ GetNode(int id) => nodes_xyz[id];
 
+        public bool TryUpdateNode(int id, XYZ new_node)
+        {
+            if(id >= nodes_xyz.Count) { return false; }
+
+            nodes_xyz[id] = new_node;
+
+            return true;
+        }
+
         public bool TryGetNode(int id, out XYZ node)
         {
             if (id >= nodes_xyz.Count)
@@ -160,6 +169,17 @@ namespace MeshGraphLib.Core
             node = nodes_xyz[id];
 
             return true;
+        }
+
+        public GraphXYZ Copy()
+        {
+            return new GraphXYZ()
+            {
+                nodes_xyz = new List<XYZ>(this.nodes_xyz),
+                nodes_map = new Dictionary<int, int>(this.nodes_map),
+                nodes_conn = new List<HashSet<int>>(this.nodes_conn),
+                IsDirected = this.IsDirected
+            };
         }
 
         public List<iFace> GetFaces()

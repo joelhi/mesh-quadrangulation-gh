@@ -42,15 +42,17 @@ namespace MeshGraphLib.Core.Helper
             return unique_nodes;
         }
 
+        public static int ComputeIndexHash(iEdge e) => ComputeIndexHash(e.id_a, e.id_b);
+
         public static int ComputeIndexHash(int id_a, int id_b)
         {
             if (id_a >= id_b)
             {
-                return (23 * 37 + id_a) * 37 + id_b;
+                return (37 + id_a) * 4271 + id_b;
             }
             else
             {
-                return (23 * 37 + id_b) * 37 + id_a;
+                return (37 + id_b) * 4271 + id_a;
             }
         }
 
