@@ -34,10 +34,11 @@ namespace MeshQuadrangulation
 
     protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
     {
-      pManager.AddMeshParameter("Mesh","M","Mesh to quadrangulate",GH_ParamAccess.item);
-      pManager.AddIntegerParameter("Sources","S","Sources for the search.",GH_ParamAccess.list);
+        pManager.AddMeshParameter("Mesh","M","Mesh to quadrangulate",GH_ParamAccess.item);
+        pManager.AddIntegerParameter("Sources","S","Sources for the search.",GH_ParamAccess.list);
+        pManager.AddNumberParameter("Tolerance", "tol", "Tolerance for point hashing", GH_ParamAccess.item, 1e-4);
 
-      pManager[1].Optional = true;
+        pManager[1].Optional = true;
     }
 
     protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
@@ -49,9 +50,16 @@ namespace MeshQuadrangulation
     {
         Mesh m = new Mesh();
         List<int> sources = new List<int>();
+        double tol = 1e-4;
 
         DA.GetData(0, ref m);
         if(!DA.GetDataList(1, sources)){ sources.Add(0);}
+        DA.GetData(2, ref tol);
+
+
+        double old_tol = Spatial.GetGlobalTol();
+
+        Spatial.SetGlobalTol(tol);
 
         GraphXYZ f_graph = m.ToFaceGraph();
         iFace[] faces = m.ToFaces();
@@ -68,6 +76,8 @@ namespace MeshQuadrangulation
         q_m.Normals.ComputeNormals();
 
         DA.SetData(0, q_m);
+
+        Spatial.SetGlobalTol(old_tol);
 
     }
 

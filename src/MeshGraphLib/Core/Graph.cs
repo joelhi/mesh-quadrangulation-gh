@@ -25,7 +25,15 @@ namespace MeshGraphLib.Core
 
         public bool HasNode(XYZ node) => nodes_map.ContainsKey(node.SpatialHash);
 
-        public int NodeIndex(XYZ node) => nodes_map[node.SpatialHash];
+        public int NodeIndex(XYZ node) 
+        {
+            int hash = node.SpatialHash;
+
+            if(nodes_map.ContainsKey(hash)){ return nodes_map[hash];}
+
+            throw new Exception("Node at" + node.ToString() + " not present in graph.");
+
+        }
 
         public bool HasEdge(EdgeXYZ edge) => HasEdge(edge.A, edge.B);
 
@@ -101,6 +109,28 @@ namespace MeshGraphLib.Core
             nodes_conn[id_b].Add(id_a);
 
             return true;
+        }
+
+        public bool TryAddFace(iFace face)
+        {
+            iEdge[] edges = face.GetEdges();
+
+            bool success = true;
+
+            for (int i = 0; i < edges.Length; i++)
+            {
+                if(!TryAddEdge(edges[i].id_a, edges[i].id_b)) {success = false; }
+            }
+
+            return success;
+        }
+
+        public void ClearEdges()
+        {
+            for (int i = 0; i < NodeCount; i++)
+            {
+                nodes_conn[i] = new HashSet<int>();
+            }
         }
 
         public EdgeXYZ[] GetEdges()

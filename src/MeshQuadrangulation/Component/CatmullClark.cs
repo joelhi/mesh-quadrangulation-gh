@@ -35,9 +35,11 @@ namespace MeshQuadrangulation
     protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
     {
       pManager.AddMeshParameter("Mesh","M","Mesh to subdivide",GH_ParamAccess.item);
+      pManager.AddIntegerParameter("Iterations","iter","Number of subdivision iterations.",GH_ParamAccess.item, 1);
       pManager.AddPointParameter("Fixed Vertices","fix","Vertices to fix during the process",GH_ParamAccess.list);
+      pManager.AddNumberParameter("Tolerance","tol","Tolerance for point hashing", GH_ParamAccess.item, 1e-4);
 
-      pManager[1].Optional = true;
+      pManager[2].Optional = true;
     }
 
     protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
@@ -48,27 +50,35 @@ namespace MeshQuadrangulation
     protected override void SolveInstance(IGH_DataAccess DA)
     {
         Mesh m = new Mesh();
+        int iter = 1;
         List<Point3d> fix = new List<Point3d>();
+        double tol = 1e-4;
 
         DA.GetData(0, ref m);
-        DA.GetDataList(1, fix);
+        DA.GetData(1, ref iter);
+        DA.GetDataList(2, fix);
+        DA.GetData(3, ref tol);
 
-        GraphXYZ f_graph = m.ToFaceGraph();
+        double old_tol = Spatial.GetGlobalTol();
+
+        Spatial.SetGlobalTol(tol);
+
         iFace[] faces = m.ToFaces();
         GraphXYZ v_graph = m.ToVertexGraph();
 
-        CatmullClark cc = new CatmullClark(v_graph, f_graph, faces);
+        CatmullClark cc = new CatmullClark(v_graph, faces);
 
-        var result = cc.Subdivide(1, fix.Select(p => p.ToXYZ()), out List<iFace> subdivided_faces);
+        var result = cc.Subdivide(iter, fix.Select(p => p.ToXYZ()), out iFace[] subdivided_faces);
         Mesh q_m = new Mesh();
 
         q_m.Vertices.AddVertices(result.GetNodes().ToRhino());
-        q_m.Faces.AddFaces(subdivided_faces.ToArray().ToRhino());
+        q_m.Faces.AddFaces(subdivided_faces.ToRhino());
 
         q_m.Normals.ComputeNormals();
 
         DA.SetData(0, q_m);
 
+        Spatial.SetGlobalTol(tol);
     }
 
     protected override System.Drawing.Bitmap Icon => null;

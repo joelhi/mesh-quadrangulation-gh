@@ -33,6 +33,7 @@ namespace MeshQuadrangulation
             pManager.AddMeshParameter("Mesh","M","Mesh to smooth",GH_ParamAccess.item);
             pManager.AddPointParameter("Fixed Vertices","fix","Vertices to fix during the smoothing process",GH_ParamAccess.list);
             pManager.AddIntegerParameter("Iterations","iter","Number of smoothing iterations",GH_ParamAccess.item, 1);
+            pManager.AddNumberParameter("Tolerance", "tol", "Tolerance for point hashing", GH_ParamAccess.item, 1e-4);
 
             pManager[1].Optional = true;
         }
@@ -47,10 +48,16 @@ namespace MeshQuadrangulation
             Mesh m = new Mesh();
             List<Point3d> fix = new List<Point3d>();
             int iter = 1;
+            double tol = 1e-4;
 
             DA.GetData(0, ref m);
             DA.GetDataList(1, fix);
             DA.GetData(2, ref iter);
+            DA.GetData(3, ref tol);
+
+            double old_tol = Spatial.GetGlobalTol();
+
+            Spatial.SetGlobalTol(tol);
 
             GraphXYZ v_graph = m.ToVertexGraph();
 
@@ -66,6 +73,8 @@ namespace MeshQuadrangulation
             smooth_m.Normals.ComputeNormals();
 
             DA.SetData(0, smooth_m);
+
+            Spatial.SetGlobalTol(old_tol);
         }
     }
 }

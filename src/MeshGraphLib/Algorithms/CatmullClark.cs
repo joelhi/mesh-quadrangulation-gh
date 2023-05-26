@@ -10,8 +10,6 @@ namespace MeshGraphLib.Algorithms
 	{
 		GraphXYZ v_graph;
 
-		GraphXYZ f_graph;
-
 		GraphXYZ subdivided_v_graph;
 
 		iFace[] faces;
@@ -26,25 +24,30 @@ namespace MeshGraphLib.Algorithms
 
 		List<List<XYZ>> new_Points;
 
-		public CatmullClark(GraphXYZ v_graph, GraphXYZ f_graph, iFace[] faces)
+		public CatmullClark(GraphXYZ v_graph, iFace[] faces)
 		{
 			this.v_graph = v_graph;
-			this.f_graph = f_graph;
 			this.faces = faces;
 		}
 		
-		public GraphXYZ Subdivide(int iterations, IEnumerable<XYZ> fixed_v, out List<iFace> faces)
+		public GraphXYZ Subdivide(int iterations, IEnumerable<XYZ> fixed_v, out iFace[] new_faces)
 		{
+			subdivided_v_graph = v_graph.Copy();
 
-            subdivided_v_graph = v_graph.Copy();
+			for (int i = 0; i < iterations; i++)
+			{
+				int original_node_count = subdivided_v_graph.NodeCount;
 
-            ComputeFacePoints();
-			MapEdgesToFaces();
-			ComputeEdgePoints();
+            	ComputeFacePoints();
+				MapEdgesToFaces();
+				ComputeEdgePoints();
 
-			UpdatePoints(new HashSet<int>(fixed_v.Select(p => v_graph.NodeIndex(p))));
+				UpdatePoints(original_node_count, new HashSet<int>(fixed_v.Select(p => v_graph.NodeIndex(p))));
 
-			faces = ComputeNewFaces();
+				faces = ComputeNewFaces().ToArray();
+			}
+
+			new_faces = faces;
 
 			return subdivided_v_graph;
 		}
@@ -59,11 +62,11 @@ namespace MeshGraphLib.Algorithms
 
 				if (face.IsTriangle) 
 				{ 
-					face_centers[i] = (v_graph.GetNode(face.A) + v_graph.GetNode(face.B) + v_graph.GetNode(face.C)) / 3; 
+					face_centers[i] = (subdivided_v_graph.GetNode(face.A) + subdivided_v_graph.GetNode(face.B) + subdivided_v_graph.GetNode(face.C)) / 3; 
 				}
 				else 
 				{ 
-					face_centers[i] = (v_graph.GetNode(face.A) + v_graph.GetNode(face.B) + v_graph.GetNode(face.C) + v_graph.GetNode(face.D)) / 4;
+					face_centers[i] = (subdivided_v_graph.GetNode(face.A) + subdivided_v_graph.GetNode(face.B) + subdivided_v_graph.GetNode(face.C) + subdivided_v_graph.GetNode(face.D)) / 4;
 				}
 
 				subdivided_v_graph.TryAddNode(face_centers[i]); 	
@@ -99,6 +102,7 @@ namespace MeshGraphLib.Algorithms
 
 		private List<iFace> ComputeNewFaces()
 		{
+			subdivided_v_graph.ClearEdges();
 			List<iFace> new_faces = new List<iFace>();
 
 			for (int i = 0; i < faces.Length; i++)
@@ -110,7 +114,10 @@ namespace MeshGraphLib.Algorithms
 				for (int j = 0; j < edges.Length; j++)
 				{
 					int e_hash = Spatial.ComputeIndexHash(edges[j]);
-					new_faces.Add(new iFace(edges[j].id_a, subdivided_v_graph.NodeIndex(edge_points[e_hash]), subdivided_v_graph.NodeIndex(face_centers[i]), subdivided_v_graph.NodeIndex(edge_points[previous_hash])));
+					iFace new_face = new iFace(edges[j].id_a, subdivided_v_graph.NodeIndex(edge_points[e_hash]), subdivided_v_graph.NodeIndex(face_centers[i]), subdivided_v_graph.NodeIndex(edge_points[previous_hash]));
+
+                    new_faces.Add(new_face);
+					subdivided_v_graph.TryAddFace(new_face);
 					previous_hash = e_hash;
 				}
 			}
@@ -125,7 +132,7 @@ namespace MeshGraphLib.Algorithms
 
 			foreach (var pair in edge_faces)
 			{
-				XYZ e_avg = (v_graph.GetNode(edge_map[pair.Key].id_a) + v_graph.GetNode(edge_map[pair.Key].id_b)) / 2.0;
+				XYZ e_avg = (subdivided_v_graph.GetNode(edge_map[pair.Key].id_a) + subdivided_v_graph.GetNode(edge_map[pair.Key].id_b)) / 2.0;
 
 				if(pair.Value.Count == 2)
 				{
@@ -142,16 +149,16 @@ namespace MeshGraphLib.Algorithms
 			
 		}
 
-		private void UpdatePoints(HashSet<int> fixed_v)
+		private void UpdatePoints(int num_nodes, HashSet<int> fixed_v)
 		{
-			for (int i = 0; i < v_graph.NodeCount; i++)
+			for (int i = 0; i < num_nodes; i++)
 			{
                 if (fixed_v.Contains(i))
                 {
 					continue;
                 }
 
-                HashSet<int> connected = v_graph.GetConnectedNodes(i);
+                HashSet<int> connected = subdivided_v_graph.GetConnectedNodes(i);
 				int n = connected.Count;
 
 				XYZ[] node_edge_points= new XYZ[n];
@@ -163,7 +170,7 @@ namespace MeshGraphLib.Algorithms
 				// Get adjacent faces and edges
 				foreach (int id in connected)
 				{
-					node_edge_points[iterator] = (v_graph.GetNode(i) + v_graph.GetNode(id)) / 2;
+					node_edge_points[iterator] = (subdivided_v_graph.GetNode(i) + subdivided_v_graph.GetNode(id)) / 2;
 
 					var f_edges = edge_faces[Spatial.ComputeIndexHash(i, id)];
 
@@ -186,17 +193,17 @@ namespace MeshGraphLib.Algorithms
 				if(naked_edges.Count == 0)
 				{
 					// Internal point
-                    subdivided_v_graph.TryUpdateNode(i, (XYZ.Average(node_face_points) + XYZ.Average(node_edge_points) * 2 + v_graph.GetNode(i) * (n - 3)) / n);
+                    subdivided_v_graph.TryUpdateNode(i, (XYZ.Average(node_face_points) + XYZ.Average(node_edge_points) * 2 + subdivided_v_graph.GetNode(i) * (n - 3)) / n);
                 }
 				else if(node_face_points.Count == 1)
 				{
 					// Corner point
-					subdivided_v_graph.TryUpdateNode(i, (v_graph.GetNode(naked_edges[0].id_b) + v_graph.GetNode(naked_edges[1].id_b) + v_graph.GetNode(i) * 6.0) / 8.0);
+					subdivided_v_graph.TryUpdateNode(i, (subdivided_v_graph.GetNode(naked_edges[0].id_b) + subdivided_v_graph.GetNode(naked_edges[1].id_b) + subdivided_v_graph.GetNode(i) * 6.0) / 8.0);
 				}
 				else
 				{
                     // Edge point
-                    subdivided_v_graph.TryUpdateNode(i, v_graph.GetNode(naked_edges[0].id_b) / 8 + v_graph.GetNode(naked_edges[1].id_b) / 8 + v_graph.GetNode(i) * 0.75);
+                    subdivided_v_graph.TryUpdateNode(i, subdivided_v_graph.GetNode(naked_edges[0].id_b) / 8 + subdivided_v_graph.GetNode(naked_edges[1].id_b) / 8 + subdivided_v_graph.GetNode(i) * 0.75);
                 }			
  			}
 		}
